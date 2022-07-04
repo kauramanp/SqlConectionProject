@@ -10,18 +10,19 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
  *
  * @author HP
  */
-public class SqlCrud extends javax.swing.JFrame {
+public class AddUser extends javax.swing.JFrame {
 
     /**
      * Creates new form SqlCrud
      */
-    public SqlCrud() {
+    public AddUser() {
         initComponents();
     }
 
@@ -94,14 +95,14 @@ public class SqlCrud extends javax.swing.JFrame {
                             .addComponent(jLabel1)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(name, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(name)
                             .addComponent(sclass)
-                            .addComponent(rollno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(rollno, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(152, 152, 152)
                         .addComponent(add)))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,7 +110,7 @@ public class SqlCrud extends javax.swing.JFrame {
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(name))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sclass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -120,7 +121,7 @@ public class SqlCrud extends javax.swing.JFrame {
                     .addComponent(rollno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(50, 50, 50)
                 .addComponent(add)
-                .addContainerGap(78, Short.MAX_VALUE))
+                .addGap(78, 78, 78))
         );
 
         pack();
@@ -128,7 +129,22 @@ public class SqlCrud extends javax.swing.JFrame {
 
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
         // TODO add your handling code here:
-
+        if (name.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(name,
+                    "Eggs are not supposed to be green.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else if (sclass.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(name,
+                    "Enter class ",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        } else if (rollno.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(name,
+                    "Enter rollno",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
         String sql = "INSERT INTO users (name, class, rollno) VALUES (?, ?, ?)";
         Connection connection = Connection.getInstance();
 
@@ -146,30 +162,30 @@ public class SqlCrud extends javax.swing.JFrame {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(SqlCrud.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }//GEN-LAST:event_addMouseClicked
 
     private void nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameKeyTyped
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
-        if (((c < 'A') || (c > 'Z')) &&((c < 'a') || (c > 'z')) && (c != KeyEvent.VK_BACK_SPACE) && (c != KeyEvent.VK_SPACE)) {
+        char c = evt.getKeyChar();
+        if (((c < 'A') || (c > 'Z')) && ((c < 'a') || (c > 'z')) && (c != KeyEvent.VK_BACK_SPACE) && (c != KeyEvent.VK_SPACE)) {
             evt.consume();  // if it's not a number, ignore the event
         }
     }//GEN-LAST:event_nameKeyTyped
 
     private void sclassKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sclassKeyTyped
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
-        if (((c < 'A') || (c > 'Z')) &&((c < 'a') || (c > 'z')) && (c != KeyEvent.VK_BACK_SPACE) && (c != KeyEvent.VK_SPACE)) {
+        char c = evt.getKeyChar();
+        if (((c < 'A') || (c > 'Z')) && ((c < 'a') || (c > 'z')) && (c != KeyEvent.VK_BACK_SPACE) && (c != KeyEvent.VK_SPACE)) {
             evt.consume();  // if it's not a number, ignore the event
         }
     }//GEN-LAST:event_sclassKeyTyped
 
     private void rollnoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_rollnoKeyTyped
         // TODO add your handling code here:
-         char c = evt.getKeyChar();
+        char c = evt.getKeyChar();
         if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
             evt.consume();  // if it's not a number, ignore the event
         }
@@ -194,20 +210,21 @@ public class SqlCrud extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SqlCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SqlCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SqlCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SqlCrud.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SqlCrud().setVisible(true);
+                new AddUser().setVisible(true);
             }
         });
 
