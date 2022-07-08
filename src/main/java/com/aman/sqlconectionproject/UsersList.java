@@ -25,10 +25,10 @@ public class UsersList extends javax.swing.JFrame {
         Statement stmt = null;
         ResultSet resultSet = null;
         ArrayList<Users> usersList = new ArrayList<>();
-    String[] headerNames = {"Sr.no", "Name", "Class", "Roll"};
-    DefaultTableModel model = new DefaultTableModel(null, headerNames);
+        String[] headerNames = {"Sr.no", "Name", "Class", "Roll no"};
+        DefaultTableModel model = new DefaultTableModel(null, headerNames);
 
-       table.setModel(model);
+        table.setModel(model);
         model.setRowCount(0);
         Object[] row = new Object[4];
         try {
@@ -36,7 +36,7 @@ public class UsersList extends javax.swing.JFrame {
 
             resultSet = stmt.executeQuery("SELECT * FROM users");
             while (resultSet.next()) {
-                usersList.add(new Users(resultSet.getInt("id"),resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno")));
+                usersList.add(new Users(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno")));
             }
             for (Users item : usersList) {
                 System.out.println(item);
@@ -92,6 +92,11 @@ public class UsersList extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(table);
 
         add.setText("Add");
@@ -126,6 +131,15 @@ public class UsersList extends javax.swing.JFrame {
         AddUser sqlCrud = new AddUser();
         sqlCrud.show(true);
     }//GEN-LAST:event_addMouseClicked
+
+    private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
+        // TODO add your handling code here:
+           DefaultTableModel dtm=(DefaultTableModel)table.getModel();
+        int selectedrow=table.getSelectedRow();
+
+        String id =dtm.getValueAt(selectedrow,0).toString();
+        System.out.println("id "+id);
+    }//GEN-LAST:event_tableMouseClicked
 
     /**
      * @param args the command line arguments

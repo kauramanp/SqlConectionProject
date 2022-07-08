@@ -4,10 +4,15 @@
  */
 package com.aman.sqlconectionproject;
 
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -19,11 +24,26 @@ import javax.swing.JTextField;
  */
 public class AddUser extends javax.swing.JFrame {
 
+    Connection connection = Connection.getInstance();
+
     /**
      * Creates new form SqlCrud
      */
     public AddUser() {
         initComponents();
+        JDateChooser chooser = new JDateChooser();
+        chooser.setLocale(Locale.US);
+
+        lblDate.add(chooser);
+//        JCalendar calendar = new JCalendar();
+////JLabel label = new JLabel("Select date of birth:");
+//        date.setLayout(new BorderLayout());
+//        date.add(calendar, BorderLayout.EAST);
+    }
+
+    public AddUser(int id) {
+//        String getStatement = connection.con.
+//        PreparedStatement ps = connection.con.prepareStatement(sql);
     }
 
     /**
@@ -43,6 +63,8 @@ public class AddUser extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         rollno = new javax.swing.JTextField();
         add = new javax.swing.JButton();
+        lblDate = new javax.swing.JLabel();
+        date = new org.jdesktop.swingx.JXDatePicker();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         menu.setText("menu");
@@ -80,6 +102,13 @@ public class AddUser extends javax.swing.JFrame {
                 addMouseClicked(evt);
             }
         });
+
+        lblDate.setText("date");
+        lblDate.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblDateMouseClicked(evt);
+            }
+        });
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -89,19 +118,25 @@ public class AddUser extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
+                        .addGap(152, 152, 152)
+                        .addComponent(add))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name)
                             .addComponent(sclass)
-                            .addComponent(rollno, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(add)))
+                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                            .addComponent(rollno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(46, 46, 46))
         );
         layout.setVerticalGroup(
@@ -119,7 +154,11 @@ public class AddUser extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(rollno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(50, 50, 50)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
                 .addComponent(add)
                 .addGap(78, 78, 78))
         );
@@ -145,15 +184,18 @@ public class AddUser extends javax.swing.JFrame {
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
-        String sql = "INSERT INTO users (name, class, rollno) VALUES (?, ?, ?)";
-        Connection connection = Connection.getInstance();
+        String sql = "INSERT INTO users (name, class, rollno, dob) VALUES (?, ?, ?, ?)";
 
         PreparedStatement statement;
         try {
+           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+           String dob = simpleDateFormat.format(date.getDate());
+           System.out.println("dob "+ dob);
             statement = connection.con.prepareStatement(sql);
             statement.setString(1, name.getText().trim());
             statement.setString(2, sclass.getText().trim());
             statement.setInt(3, Integer.parseInt(rollno.getText().trim()));
+            statement.setString(4,dob);
 
             int rowsInserted = statement.executeUpdate();
             if (rowsInserted > 0) {
@@ -190,6 +232,11 @@ public class AddUser extends javax.swing.JFrame {
             evt.consume();  // if it's not a number, ignore the event
         }
     }//GEN-LAST:event_rollnoKeyTyped
+
+    private void lblDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDateMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_lblDateMouseClicked
 
     /**
      * @param args the command line arguments
@@ -232,10 +279,12 @@ public class AddUser extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
+    private org.jdesktop.swingx.JXDatePicker date;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel lblDate;
     private javax.swing.JMenuItem menu;
     private javax.swing.JTextField name;
     private javax.swing.JTextField rollno;
