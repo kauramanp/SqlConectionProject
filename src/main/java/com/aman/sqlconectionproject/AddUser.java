@@ -9,8 +9,10 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -25,6 +27,10 @@ import javax.swing.JTextField;
 public class AddUser extends javax.swing.JFrame {
 
     Connection connection = Connection.getInstance();
+    Boolean isUpdate = false;
+    Users user;
+            ArrayList<Users> usersList = new ArrayList<>();
+
 
     /**
      * Creates new form SqlCrud
@@ -33,17 +39,23 @@ public class AddUser extends javax.swing.JFrame {
         initComponents();
         JDateChooser chooser = new JDateChooser();
         chooser.setLocale(Locale.US);
-
         lblDate.add(chooser);
-//        JCalendar calendar = new JCalendar();
-////JLabel label = new JLabel("Select date of birth:");
-//        date.setLayout(new BorderLayout());
-//        date.add(calendar, BorderLayout.EAST);
     }
 
     public AddUser(int id) {
-//        String getStatement = connection.con.
-//        PreparedStatement ps = connection.con.prepareStatement(sql);
+        String statement = "SELECT * FROM users WHERE id = "+id;
+        try {
+            PreparedStatement ps = connection.con.prepareStatement(statement);
+            ResultSet resultSet = ps.executeQuery();
+             while (resultSet.next()) {
+                usersList.add(new Users(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno"), resultSet.getString("dob")));
+           
+             }
+             name.setText(usersList[0].getName());
+        } catch (SQLException ex) {
+            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
     }
 
     /**

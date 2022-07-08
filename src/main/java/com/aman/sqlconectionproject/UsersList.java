@@ -10,7 +10,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,14 +17,14 @@ import javax.swing.table.DefaultTableModel;
  * @author HP
  */
 public class UsersList extends javax.swing.JFrame {
+        Connection connection = Connection.getInstance();
+        ArrayList<Users> usersList = new ArrayList<>();
 
     private void getData() {
-        Connection connection = Connection.getInstance();
 
         Statement stmt = null;
         ResultSet resultSet = null;
-        ArrayList<Users> usersList = new ArrayList<>();
-        String[] headerNames = {"Sr.no", "Name", "Class", "Roll no"};
+        String[] headerNames = {"Sr.no", "Name", "Class", "Roll no", "Date of Birth"};
         DefaultTableModel model = new DefaultTableModel(null, headerNames);
 
         table.setModel(model);
@@ -36,7 +35,7 @@ public class UsersList extends javax.swing.JFrame {
 
             resultSet = stmt.executeQuery("SELECT * FROM users");
             while (resultSet.next()) {
-                usersList.add(new Users(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno")));
+                usersList.add(new Users(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno"), resultSet.getString("dob")));
             }
             for (Users item : usersList) {
                 System.out.println(item);
@@ -44,6 +43,8 @@ public class UsersList extends javax.swing.JFrame {
                 row[1] = item.getName();
                 row[2] = item.getSclass();
                 row[3] = item.getRollno();
+                                row[4] = item.getDob();
+
                 model.addRow(row);
             }
         } catch (SQLException ex) {
@@ -139,6 +140,8 @@ public class UsersList extends javax.swing.JFrame {
 
         String id =dtm.getValueAt(selectedrow,0).toString();
         System.out.println("id "+id);
+          AddUser sqlCrud = new AddUser();
+        sqlCrud.show(true);
     }//GEN-LAST:event_tableMouseClicked
 
     /**
@@ -167,7 +170,6 @@ public class UsersList extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(UsersList.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        Connection connection = Connection.getInstance();
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

@@ -15,17 +15,26 @@ public class Users {
     private String sclass;
     private String name;
     private int rollno;
+    private String dob;
 
-    
     public Users() {
     }
-    
 
-    public Users(int id,String name, String sClass, int rollno) {
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
+    public Users(int id, String name, String sClass, int rollno, String dob) {
         this.id = id;
         this.name = name;
         this.sclass = sClass;
         this.rollno = rollno;
+        this.dob = dob;
+
     }
 
     public Users(String name, String sClass, int rollno) {
@@ -42,7 +51,6 @@ public class Users {
         this.id = id;
     }
 
-    
     public String getSclass() {
         return sclass;
     }
