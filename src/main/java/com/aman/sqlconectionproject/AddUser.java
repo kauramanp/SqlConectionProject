@@ -37,9 +37,7 @@ public class AddUser extends javax.swing.JFrame {
      */
     public AddUser() {
         initComponents();
-        JDateChooser chooser = new JDateChooser();
-        chooser.setLocale(Locale.US);
-        lblDate.add(chooser);
+     
     }
 
     public AddUser(int id) {
