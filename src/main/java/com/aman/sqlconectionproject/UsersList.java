@@ -29,7 +29,7 @@ public class UsersList extends javax.swing.JFrame {
 
         table.setModel(model);
         model.setRowCount(0);
-        Object[] row = new Object[4];
+        Object[] row = new Object[5];
         try {
             stmt = connection.con.createStatement();
 
@@ -43,7 +43,7 @@ public class UsersList extends javax.swing.JFrame {
                 row[1] = item.getName();
                 row[2] = item.getSclass();
                 row[3] = item.getRollno();
-                                row[4] = item.getDob();
+                row[4] = item.getDob();
 
                 model.addRow(row);
             }
@@ -140,8 +140,8 @@ public class UsersList extends javax.swing.JFrame {
 
         String id =dtm.getValueAt(selectedrow,0).toString();
         System.out.println("id "+id);
-          AddUser sqlCrud = new AddUser();
-        sqlCrud.show(true);
+        AddUser sqlCrud = new AddUser(Integer.valueOf(id));
+        sqlCrud.setVisible(true);
     }//GEN-LAST:event_tableMouseClicked
 
     /**

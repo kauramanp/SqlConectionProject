@@ -4,17 +4,14 @@
  */
 package com.aman.sqlconectionproject;
 
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -28,32 +25,45 @@ public class AddUser extends javax.swing.JFrame {
 
     Connection connection = Connection.getInstance();
     Boolean isUpdate = false;
-    Users user;
-            ArrayList<Users> usersList = new ArrayList<>();
-
+    Users user= new Users();
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     /**
      * Creates new form SqlCrud
      */
     public AddUser() {
         initComponents();
-     
+
     }
 
     public AddUser(int id) {
-        String statement = "SELECT * FROM users WHERE id = "+id;
+        initComponents();
+        isUpdate = true;
+        System.out.println("in parameterised constructor");
+        String statement = "SELECT * FROM users WHERE id = " + id;
         try {
             PreparedStatement ps = connection.con.prepareStatement(statement);
             ResultSet resultSet = ps.executeQuery();
-             while (resultSet.next()) {
-                usersList.add(new Users(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("class"), resultSet.getInt("rollno"), resultSet.getString("dob")));
-           
-             }
-             name.setText(usersList[0].getName());
+            while (resultSet.next()) {
+                user.setId(resultSet.getInt("id"));
+                user.setName(resultSet.getString("name"));
+                user.setSclass(resultSet.getString("class"));
+                user.setRollno(resultSet.getInt("rollno"));
+                user.setDob(resultSet.getString("dob"));
+                name.setText(resultSet.getString("name"));
+                sclass.setText(resultSet.getString("class"));
+                rollno.setText(String.valueOf(resultSet.getInt("rollno")));
+                String dob = resultSet.getString("dob");
+                Date selectedDate = simpleDateFormat.parse(dob);
+                date.setDate(selectedDate);
+
+            }
         } catch (SQLException ex) {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
+
     }
 
     /**
@@ -131,16 +141,14 @@ public class AddUser extends javax.swing.JFrame {
                         .addGap(152, 152, 152)
                         .addComponent(add))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(50, 50, 50)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)))
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(name)
@@ -165,7 +173,7 @@ public class AddUser extends javax.swing.JFrame {
                     .addComponent(jLabel3)
                     .addComponent(rollno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(5, 5, 5)
@@ -180,7 +188,7 @@ public class AddUser extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (name.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(name,
-                    "Eggs are not supposed to be green.",
+                    "Enter name",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
         } else if (sclass.getText().trim().isEmpty()) {
@@ -193,30 +201,52 @@ public class AddUser extends javax.swing.JFrame {
                     "Enter rollno",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
-        }
-        String sql = "INSERT INTO users (name, class, rollno, dob) VALUES (?, ?, ?, ?)";
+        } else if (isUpdate == true) {
+            String sql = "UPDATE users set name=?, class=?, rollno=?, dob=? where id=?";
 
-        PreparedStatement statement;
-        try {
-           SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-           String dob = simpleDateFormat.format(date.getDate());
-           System.out.println("dob "+ dob);
-            statement = connection.con.prepareStatement(sql);
-            statement.setString(1, name.getText().trim());
-            statement.setString(2, sclass.getText().trim());
-            statement.setInt(3, Integer.parseInt(rollno.getText().trim()));
-            statement.setString(4,dob);
+            PreparedStatement statement;
+            try {
+                String dob = simpleDateFormat.format(date.getDate());
+                System.out.println("dob " + dob);
+                statement = connection.con.prepareStatement(sql);
+                statement.setString(1, name.getText().trim());
+                statement.setString(2, sclass.getText().trim());
+                statement.setInt(3, Integer.parseInt(rollno.getText().trim()));
+                statement.setString(4, dob);
+                statement.setInt(5, user.getId());
 
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("A new user was inserted successfully!");
-                this.dispose();
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("A new user was inserted successfully!");
+                    this.dispose();
 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } else {
+            String sql = "INSERT INTO users (name, class, rollno, dob) VALUES (?, ?, ?, ?)";
 
+            PreparedStatement statement;
+            try {
+                String dob = simpleDateFormat.format(date.getDate());
+                System.out.println("dob " + dob);
+                statement = connection.con.prepareStatement(sql);
+                statement.setString(1, name.getText().trim());
+                statement.setString(2, sclass.getText().trim());
+                statement.setInt(3, Integer.parseInt(rollno.getText().trim()));
+                statement.setString(4, dob);
+
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("A new user was inserted successfully!");
+                    this.dispose();
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_addMouseClicked
 
     private void nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameKeyTyped
