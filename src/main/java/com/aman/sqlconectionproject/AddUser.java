@@ -25,14 +25,15 @@ public class AddUser extends javax.swing.JFrame {
 
     Connection connection = Connection.getInstance();
     Boolean isUpdate = false;
-    Users user= new Users();
+    Users user = new Users();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
+    int id;
     /**
      * Creates new form SqlCrud
      */
     public AddUser() {
         initComponents();
+        delete.setVisible(false);
 
     }
 
@@ -56,7 +57,7 @@ public class AddUser extends javax.swing.JFrame {
                 String dob = resultSet.getString("dob");
                 Date selectedDate = simpleDateFormat.parse(dob);
                 date.setDate(selectedDate);
-
+                delete.setVisible(true);
             }
         } catch (SQLException ex) {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,6 +86,7 @@ public class AddUser extends javax.swing.JFrame {
         add = new javax.swing.JButton();
         lblDate = new javax.swing.JLabel();
         date = new org.jdesktop.swingx.JXDatePicker();
+        delete = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
 
         menu.setText("menu");
@@ -124,9 +126,11 @@ public class AddUser extends javax.swing.JFrame {
         });
 
         lblDate.setText("date");
-        lblDate.addMouseListener(new java.awt.event.MouseAdapter() {
+
+        delete.setText("Delete");
+        delete.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblDateMouseClicked(evt);
+                deleteMouseClicked(evt);
             }
         });
         setJMenuBar(jMenuBar1);
@@ -136,26 +140,27 @@ public class AddUser extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(152, 152, 152)
-                        .addComponent(add))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(name)
-                            .addComponent(sclass)
-                            .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
-                            .addComponent(rollno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblDate, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(name)
+                    .addComponent(sclass)
+                    .addComponent(date, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                    .addComponent(rollno, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(46, 46, 46))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(add)
+                .addGap(84, 84, 84)
+                .addComponent(delete)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -176,9 +181,11 @@ public class AddUser extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(5, 5, 5)
-                .addComponent(add)
-                .addGap(78, 78, 78))
+                .addGap(42, 42, 42)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(add)
+                    .addComponent(delete))
+                .addGap(41, 41, 41))
         );
 
         pack();
@@ -218,6 +225,8 @@ public class AddUser extends javax.swing.JFrame {
                 int rowsInserted = statement.executeUpdate();
                 if (rowsInserted > 0) {
                     System.out.println("A new user was inserted successfully!");
+                    UsersList userList = new UsersList();
+                    userList.setVisible(true);
                     this.dispose();
 
                 }
@@ -240,6 +249,8 @@ public class AddUser extends javax.swing.JFrame {
                 int rowsInserted = statement.executeUpdate();
                 if (rowsInserted > 0) {
                     System.out.println("A new user was inserted successfully!");
+                      UsersList userList = new UsersList();
+                    userList.setVisible(true);
                     this.dispose();
 
                 }
@@ -273,10 +284,27 @@ public class AddUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_rollnoKeyTyped
 
-    private void lblDateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblDateMouseClicked
+    private void deleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteMouseClicked
         // TODO add your handling code here:
+         String sql = "DELETE FROM users where id = ?";
 
-    }//GEN-LAST:event_lblDateMouseClicked
+            PreparedStatement statement;
+            try {
+                statement = connection.con.prepareStatement(sql);
+                statement.setInt(1, user.getId());
+
+                int rowsInserted = statement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("A user is deleted");
+                      UsersList userList = new UsersList();
+                    userList.setVisible(true);
+                    this.dispose();
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    }//GEN-LAST:event_deleteMouseClicked
 
     /**
      * @param args the command line arguments
@@ -320,6 +348,7 @@ public class AddUser extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add;
     private org.jdesktop.swingx.JXDatePicker date;
+    private javax.swing.JButton delete;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

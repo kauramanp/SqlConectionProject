@@ -130,7 +130,8 @@ public class UsersList extends javax.swing.JFrame {
     private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
         // TODO add your handling code here:
         AddUser sqlCrud = new AddUser();
-        sqlCrud.show(true);
+        sqlCrud.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_addMouseClicked
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
@@ -142,6 +143,7 @@ public class UsersList extends javax.swing.JFrame {
         System.out.println("id "+id);
         AddUser sqlCrud = new AddUser(Integer.valueOf(id));
         sqlCrud.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_tableMouseClicked
 
     /**
