@@ -21,7 +21,7 @@ import javax.swing.JTextField;
  *
  * @author HP
  */
-public class AddUser extends javax.swing.JFrame {
+public class AddUpdateUser extends javax.swing.JFrame {
 
     Connection connection = Connection.getInstance();
     Boolean isUpdate = false;
@@ -31,13 +31,13 @@ public class AddUser extends javax.swing.JFrame {
     /**
      * Creates new form SqlCrud
      */
-    public AddUser() {
+    public AddUpdateUser() {
         initComponents();
         delete.setVisible(false);
 
     }
 
-    public AddUser(int id) {
+    public AddUpdateUser(int id) {
         initComponents();
         isUpdate = true;
         System.out.println("in parameterised constructor");
@@ -60,9 +60,9 @@ public class AddUser extends javax.swing.JFrame {
                 delete.setVisible(true);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -231,7 +231,7 @@ public class AddUser extends javax.swing.JFrame {
 
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             String sql = "INSERT INTO users (name, class, rollno, dob) VALUES (?, ?, ?, ?)";
@@ -255,7 +255,7 @@ public class AddUser extends javax.swing.JFrame {
 
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_addMouseClicked
@@ -302,7 +302,7 @@ public class AddUser extends javax.swing.JFrame {
 
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
             }
     }//GEN-LAST:event_deleteMouseClicked
 
@@ -325,21 +325,23 @@ public class AddUser extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUpdateUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUpdateUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUpdateUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AddUpdateUser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddUser().setVisible(true);
+                new AddUpdateUser().setVisible(true);
             }
         });
 
