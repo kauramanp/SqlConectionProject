@@ -34,13 +34,12 @@ public class AddUpdateUser extends javax.swing.JFrame {
     public AddUpdateUser() {
         initComponents();
         delete.setVisible(false);
-
+        addUpdate.setText("Add User");
     }
 
     public AddUpdateUser(int id) {
         initComponents();
         isUpdate = true;
-        System.out.println("in parameterised constructor");
         String statement = "SELECT * FROM users WHERE id = " + id;
         try {
             PreparedStatement ps = connection.con.prepareStatement(statement);
@@ -58,6 +57,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
                 Date selectedDate = simpleDateFormat.parse(dob);
                 date.setDate(selectedDate);
                 delete.setVisible(true);
+                addUpdate.setText("Update User");
             }
         } catch (SQLException ex) {
             Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
@@ -83,7 +83,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
         sclass = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         rollno = new javax.swing.JTextField();
-        add = new javax.swing.JButton();
+        addUpdate = new javax.swing.JButton();
         lblDate = new javax.swing.JLabel();
         date = new org.jdesktop.swingx.JXDatePicker();
         delete = new javax.swing.JButton();
@@ -118,10 +118,10 @@ public class AddUpdateUser extends javax.swing.JFrame {
             }
         });
 
-        add.setText("Add");
-        add.addMouseListener(new java.awt.event.MouseAdapter() {
+        addUpdate.setText("Add");
+        addUpdate.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                addMouseClicked(evt);
+                addUpdateMouseClicked(evt);
             }
         });
 
@@ -157,7 +157,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
                 .addGap(46, 46, 46))
             .addGroup(layout.createSequentialGroup()
                 .addGap(74, 74, 74)
-                .addComponent(add)
+                .addComponent(addUpdate)
                 .addGap(84, 84, 84)
                 .addComponent(delete)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -183,7 +183,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
                     .addComponent(date, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(add)
+                    .addComponent(addUpdate)
                     .addComponent(delete))
                 .addGap(41, 41, 41))
         );
@@ -191,7 +191,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addMouseClicked
+    private void addUpdateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_addUpdateMouseClicked
         // TODO add your handling code here:
         if (name.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(name,
@@ -258,7 +258,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
                 Logger.getLogger(AddUpdateUser.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_addMouseClicked
+    }//GEN-LAST:event_addUpdateMouseClicked
 
     private void nameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nameKeyTyped
         // TODO add your handling code here:
@@ -296,7 +296,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
                 int rowsInserted = statement.executeUpdate();
                 if (rowsInserted > 0) {
                     System.out.println("A user is deleted");
-                      UsersList userList = new UsersList();
+                    UsersList userList = new UsersList();
                     userList.setVisible(true);
                     this.dispose();
 
@@ -348,7 +348,7 @@ public class AddUpdateUser extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton add;
+    private javax.swing.JButton addUpdate;
     private org.jdesktop.swingx.JXDatePicker date;
     private javax.swing.JButton delete;
     private javax.swing.JLabel jLabel1;
